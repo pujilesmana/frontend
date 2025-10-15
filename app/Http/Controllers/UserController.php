@@ -15,22 +15,35 @@ class UserController extends Controller
 
     public function fetchUsers(Request $request)
     {
-        // Ambil token dari session (diset setelah login)
         $token = session('tokenBackend');
-
-        if (!$token) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
         Log::info('Fetching users with token: ' . $token);
-        // Panggil endpoint API yang diproteksi JWT
+        if (!$token) return response()->json(['message' => 'Unauthorized'], 401);
+
         $response = Http::withToken($token)->get(config('app.backend_url') . '/api/users');
-        
         if ($response->failed()) {
             Log::error('Failed to fetch users: ' . $response->body());
-            return response()->json(['message' => 'Gagal mengambil data user'], 500);
+            return response()->json(['message' => 'Gagal mengambil data user', 'data'=>[]], 500);
         }
-
         return response()->json($response->json());
+    }
+
+    public function store(Request $request)
+    {
+        $token = session('tokenBackend');
+        Log::info('Creating user with token: ' . $token);
+        if (!$token) return response()->json(['message' => 'Unauthorized'], 401);
+
+        Http::withToken($token)->post(config('app.backend_url') . '/api/users', $request->all());
+        return redirect()->back()->with('status', 'User created!');
+    }
+
+    public function destroy($id)
+    {
+        $token = session('tokenBackend');  
+        Log::info('Deleting user with token: ' . $token);
+        if (!$token) return response()->json(['message' => 'Unauthorized'], 401);
+
+        $response = Http::withToken($token)->delete(config('app.backend_url') . "/api/users/{$id}");
+        return response()->json(['status' => $response->status()]);
     }
 }
