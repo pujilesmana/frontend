@@ -52,7 +52,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost:8080'),
+    'backend_url' => env('BACKEND_URL', 'http://localhost:8000'),
 
     /*
     |--------------------------------------------------------------------------
