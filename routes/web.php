@@ -16,3 +16,6 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/data', [UserController::class, 'fetchUsers'])->name('users.data');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+Route::post('/qrcode', [UserController::class, 'generateQrCode'])->name('users.qrcode');
+Route::post('/barcode', [UserController::class, 'generateBarcode'])->name('users.barcode');

@@ -32,8 +32,6 @@ class AuthController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
-
-                // Simpan token ke session
                 session(['tokenBackend' => $data['data']['access_token'] ?? null]);
 
                 return redirect()->route('users.index')->with('success', 'Login berhasil!');
